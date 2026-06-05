@@ -1,0 +1,43 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: Python Auth0 Unblocker Serverless Infrastructure
+
+Globals:
+  Function:
+    Timeout: 30
+    MemorySize: 256
+    Runtime: python3.11
+    Architectures:
+      - x86_64
+
+Resources:
+  # Stream Processor Lambda Function
+  StreamProcessorFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: unblock_auth0_sms/
+      Handler: app.lambda_handler
+      Environment:
+        Variables:
+          AUTH0_DOMAIN: '{{resolve:ssm:/otd-loyalty/AUTH0_DOMAIN}}'
+          AUTH0_CLIENT_ID: '{{resolve:ssm:/otd-loyalty/AUTH0_CLIENT_ID}}'
+          AUTH0_CLIENT_SECRET: '{{resolve:ssm:/otd-loyalty/AUTH0_CLIENT_SECRET}}'
+          TABLE_NAME: otd-loyalty-provider-auth0-webhook
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: otd-loyalty-provider-auth0-webhook
+      Events:
+        DynamoDBStream:
+          Type: DynamoDB
+          Properties:
+            Stream: "arn:aws:dynamodb:ap-south-1:012751250391:table/otd-loyalty-provider-auth0-webhook/stream/2026-06-05T15:54:52.294"
+            StartingPosition: TRIM_HORIZON
+            BatchSize: 10
+            FilterCriteria:
+              Filters:
+                - Pattern: "{\"eventName\": [\"REMOVE\"]}"
+
+Outputs:
+  StreamProcessorFunctionArn:
+    Description: ARN of the Stream Processor Lambda
+    Value: !GetAtt StreamProcessorFunction.Arn

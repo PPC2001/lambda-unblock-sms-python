@@ -1,0 +1,42 @@
+{
+    "Records": [
+        {
+            "eventID": "1",
+            "eventName": "REMOVE",
+            "eventVersion": "1.1",
+            "eventSource": "aws:dynamodb",
+            "awsRegion": "ap-south-1",
+            "dynamodb": {
+                "Keys": {
+                    "phoneNumber": {
+                        "S": "+15551234567"
+                    }
+                },
+                "OldImage": {
+                    "phoneNumber": {
+                        "S": "+15551234567"
+                    },
+                    "attemptCount": {
+                        "N": "0"
+                    },
+                    "blockedAt": {
+                        "N": "1704067200"
+                    },
+                    "unBlockedAt": {
+                        "N": "1704153600"
+                    },
+                    "status": {
+                        "S": "BLOCKED"
+                    },
+                    "lastEventId": {
+                        "S": "evt_123456789"
+                    }
+                },
+                "SequenceNumber": "111",
+                "SizeBytes": 26,
+                "StreamViewType": "NEW_AND_OLD_IMAGES"
+            },
+            "eventSourceARN": "arn:aws:dynamodb:ap-south-1:123456789012:table/Auth0BlockedNumbers/stream/2023-01-01T00:00:00.000"
+        }
+    ]
+}
