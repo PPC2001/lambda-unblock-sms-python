@@ -1,4 +1,4 @@
-# OTD Loyalty Lambda — Auth0 SMS Unblocker (Python)
+# Lambda — Auth0 SMS Unblocker (Python)
 
 ## Overview
 
